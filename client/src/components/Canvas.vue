@@ -11,8 +11,6 @@ export default {
     msg: String,
     clientData: Array,
   },
-  data() {
-  },
   methods: {
     drawToCanvas: function() {
       this.canvas.width = window.innerWidth
@@ -28,7 +26,7 @@ export default {
   mounted() {
     this.canvas = document.getElementById("mouse-canvas")
     this.context = this.canvas.getContext("2d")
-    setInterval(this.drawToCanvas, 25)
+    setInterval(this.drawToCanvas, 1)
   }
 }
 </script>
