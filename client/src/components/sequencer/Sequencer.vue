@@ -1,10 +1,13 @@
 <template>
     <div id="sequencer-container">
-      <NoteContainer @stepPainted="stepPainted"/>
-      <NoteContainer @stepPainted="stepPainted"/>
-      <NoteContainer @stepPainted="stepPainted"/>
-      <NoteContainer @stepPainted="stepPainted"/>
-      <NoteContainer @stepPainted="stepPainted"/>
+      <NoteContainer
+        v-for="note in notes"
+        :key="note"
+
+        v-bind:pitch="note"
+        v-bind:sequence="getRelevantNoteSequence(note)"
+
+        @stepPainted="stepPainted"/>
     </div>
 </template>
 
@@ -16,13 +19,41 @@ export default {
   components: {
     NoteContainer
   },
+  data() {
+    return {
+      notes: [
+         "B", "A", "G", "F", "E", "D", "C"
+      ]
+    }
+  },
+  props: {
+    sequence: Array
+  },
   methods: {
-      stepPainted: function(position) {
-        console.log("emitting from sequencer" + position)
-        this.$emit('stepPainted', position)
+      stepPainted: function(pitch, position) {
+        console.log("emitting from sequencer, pos: " + position + ", pitch: " + pitch)
+        this.$emit('stepPainted', pitch, position)
+      },
+      getRelevantNoteSequence: function(pitch) {
+        let resultSequence = []
+        this.sequence.forEach(note => {
+          if (note.pitch === pitch) {
+            resultSequence.push(note)
+          }
+        })
+        return resultSequence
+        
+        
+        // return this.sequence.map((note) => {
+        //   if (note.pitch === pitch) {
+        //     return note
+        //   }
+        // })
       }
   },
   mounted() {
+    console.log("mounted sequencer")
+    console.log(this.sequence)
   }
 }
 //clicking step will add a new note of length 1 step to bar @ position n-1

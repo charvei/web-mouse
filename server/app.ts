@@ -2,10 +2,10 @@ import express from "express"
 import { Server, Socket } from "socket.io"
 import http from "http"
 import { v4 as uuidv4 } from "uuid"
-import { Bar, Note } from "./models/bar"
+import { Sequence, Note, Pitch } from "./models/sequence"
 
 const views_path = __dirname + "/views/"
-const PORT = 3008
+const PORT = 3010
 
 const app = express()
 
@@ -25,7 +25,7 @@ let makeColour = () => { return "#" + randColourHex() + randColourHex() + randCo
 
 let connections = []
 
-let bar = new Bar()
+let sequence = new Sequence()
 
 
 io.on("connection", (socket: Socket) => {
@@ -49,7 +49,7 @@ io.on("connection", (socket: Socket) => {
     socket.emit("generatedClientId", generatedClientId)
     
     //send over sequence
-    socket.emit("generatedSequence", bar)
+    socket.emit("generatedSequence", sequence)
     
     // set up receive event handling
     socket.on("clientMouseCoords", (clientId, mouse) => {
@@ -61,22 +61,22 @@ io.on("connection", (socket: Socket) => {
         }
     })
 
-    socket.on("stepPainted", (note, position) => {
+    socket.on("stepPainted", (pitch, position) => {
         console.log(position)
-        let existingStepIndex = bar.notes.findIndex((note) => {
-            return note.start === position
+        let existingStepIndex = sequence.notes.findIndex((note) => {
+            return (note.start === position && note.pitch === pitch)
         })
         if (existingStepIndex < 0) {
             console.log("adding to notes")
-            bar.notes.push({length: 1, start: position})
+            sequence.notes.push({length: 1, start: position, pitch: pitch})
         } else {
             console.log("removing notes")
-            bar.notes.splice(existingStepIndex, 1)
+            sequence.notes.splice(existingStepIndex, 1)
         }
 
         
         connections.forEach(connection => {
-            connection.socket.emit("sequenceUpdated", bar)
+            connection.socket.emit("sequenceUpdated", sequence)
         })
     })
 

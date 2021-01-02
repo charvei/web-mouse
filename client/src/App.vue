@@ -6,7 +6,7 @@
       </div>
       <!-- <h1>S e q u e n c e . w i t   h . F r i e n d s</h1> -->
       <PlaybackController v-bind:sequence="sequence"/>
-      <Sequencer @stepPainted="stepPainted"/> 
+      <Sequencer v-bind:sequence="sequence" @stepPainted="stepPainted"/> 
     </div>
     <Canvas msg="Canvas" v-bind:clientData="clientData"  />
   </div>
@@ -34,7 +34,7 @@ export default {
       socket: io(),
       clientId: null,
       clientData: [],
-      sequence: null
+      sequence: []
     }
   },
   methods: {
@@ -47,9 +47,9 @@ export default {
         this.socket.emit("clientMouseCoords", this.clientId, this.mouse)
       }, 10);
     },
-    stepPainted: function(position) {
-      console.log("received step painted at app, for position " + position)
-      this.socket.emit("stepPainted", 1, position)
+    stepPainted: function(pitch, position) {
+      console.log("received step painted at app, for position " + position + ", pitch => " + pitch)
+      this.socket.emit("stepPainted", pitch, position)
     }
     
   },
@@ -62,8 +62,8 @@ export default {
       this.clientId = myClientId
     })
 
-    this.socket.on("generatedSequence", (bar) => {
-      this.sequence = bar
+    this.socket.on("generatedSequence", (sequence) => {
+      this.sequence = sequence.notes
     })
 
     this.startEmittingMyMouseCoordinates()
@@ -72,15 +72,10 @@ export default {
       this.clientData = clients
     })
 
-    this.socket.on("sequenceUpdated", (bar) => {
-      console.log("received sequence updated, new bar: ")
-      console.log(bar)
-      this.sequence = bar
-    })
-
-    this.socket.on("serverButtonClicked", (funk) => {
-      console.log("received server button clicked event")
-      alert(funk.print)
+    this.socket.on("sequenceUpdated", (sequence) => {
+      console.log("received sequence updated, new sequence: ")
+      console.log(sequence)
+      this.sequence = sequence.notes
     })
   }
 }
