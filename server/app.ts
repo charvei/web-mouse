@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid"
 import { Sequence, Note, Pitch } from "./models/sequence"
 
 const views_path = __dirname + "/views/"
-const PORT = 3010
+const PORT = 3000
 
 const app = express()
 
@@ -25,13 +25,18 @@ let makeColour = () => { return "#" + randColourHex() + randColourHex() + randCo
 
 let connections = []
 
-let sequence = new Sequence()
+// let sequence = new Sequence()
+let sequence: Note[] = []
 
 
-io.on("connection", (socket: Socket) => {
-    console.log("on connect event detected by server")
-    
+io.on("connection", (socket: Socket) => {    
     let generatedClientId = uuidv4()
+
+    let connectionLog = (message: string) => {
+        console.log(message + "." + " ".repeat(40 - message.length) + "[" + generatedClientId.substring(0,5) + "]")
+    }
+
+    connectionLog("New client connected")
 
     connections.push({
         socket: socket,
@@ -61,17 +66,17 @@ io.on("connection", (socket: Socket) => {
         }
     })
 
-    socket.on("stepPainted", (pitch, position) => {
-        console.log(position)
-        let existingStepIndex = sequence.notes.findIndex((note) => {
-            return (note.start === position && note.pitch === pitch)
+    socket.on("stepPainted", (pitch, time) => {
+        connectionLog("Step painted for time: " + time)
+        let existingStepIndex = sequence.findIndex((note) => {
+            return (note.time === time && note.pitch === pitch)
         })
         if (existingStepIndex < 0) {
-            console.log("adding to notes")
-            sequence.notes.push({length: 1, start: position, pitch: pitch})
+            connectionLog("Adding to notes")
+            sequence.push({duration: "16n", time: time, pitch: pitch})
         } else {
-            console.log("removing notes")
-            sequence.notes.splice(existingStepIndex, 1)
+            connectionLog("Removing notes")
+            sequence.splice(existingStepIndex, 1)
         }
 
         
@@ -84,16 +89,18 @@ io.on("connection", (socket: Socket) => {
         socket.emit("serverMouseCoords", connections.map((connection) => {
             return connection.clientData
         }))
-    }, 25)
+    }, 10)
 
     // Disconnect
     socket.on("disconnect", () => {
-        console.log(connections.length)
         let clientIndex = connections.findIndex(connection => {
-            return connection.clientData.id === generatedClientId
+            if (connection.clientData.id === generatedClientId) {
+                connectionLog("Client disconnected")
+                return true
+            }
         })
         connections.splice(clientIndex, 1)
-        console.log(connections.length)
+        console.log("Number of connected clients: " + connections.length)
     })
     
 })

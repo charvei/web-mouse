@@ -5,10 +5,11 @@
         <h1 id="title">S e q u e n c . e r</h1>
       </div>
       <!-- <h1>S e q u e n c e . w i t   h . F r i e n d s</h1> -->
-      <PlaybackController v-bind:sequence="sequence"/>
-      <Sequencer v-bind:sequence="sequence" @stepPainted="stepPainted"/> 
+      <PlaybackController />
+      <Sequencer @stepPainted="stepPainted"/> 
+      <div id="footer"></div>
     </div>
-    <Canvas msg="Canvas" v-bind:clientData="clientData"  />
+    <Canvas msg="Canvas" />
   </div>
 </template>
 
@@ -16,7 +17,6 @@
 import Canvas from './components/Canvas.vue'
 import Sequencer from './components/sequencer/Sequencer.vue'
 import PlaybackController from './components/PlaybackController.vue'
-import io from 'socket.io-client'
 
 export default {
   name: 'App',
@@ -31,10 +31,6 @@ export default {
         x: 0,
         y: 0,
       },
-      socket: io(),
-      clientId: null,
-      clientData: [],
-      sequence: []
     }
   },
   methods: {
@@ -44,39 +40,17 @@ export default {
     },
     startEmittingMyMouseCoordinates: function() {
       setInterval(() => {
-        this.socket.emit("clientMouseCoords", this.clientId, this.mouse)
+        this.$store.state.socket.emit("clientMouseCoords", this.$store.state.clientId, this.mouse)
       }, 10);
     },
     stepPainted: function(pitch, position) {
       console.log("received step painted at app, for position " + position + ", pitch => " + pitch)
-      this.socket.emit("stepPainted", pitch, position)
+      this.$store.state.socket.emit("stepPainted", pitch, position)
     }
     
   },
   mounted() {
-    this.socket.on('connect', () => {
-      console.log("client connect")
-    })
-
-    this.socket.on("generatedClientId", (myClientId) => {
-      this.clientId = myClientId
-    })
-
-    this.socket.on("generatedSequence", (sequence) => {
-      this.sequence = sequence.notes
-    })
-
     this.startEmittingMyMouseCoordinates()
-
-    this.socket.on("serverMouseCoords", (clients) => {
-      this.clientData = clients
-    })
-
-    this.socket.on("sequenceUpdated", (sequence) => {
-      console.log("received sequence updated, new sequence: ")
-      console.log(sequence)
-      this.sequence = sequence.notes
-    })
   }
 }
 </script>
@@ -97,16 +71,6 @@ export default {
   width: 100%;
 }
 
-#top-nav {
-  display: flex;
-  width: 100%;
-}
-
-#title {
-  margin-left: 5%;
-  align-self: center;
-}
-
 #content-container {
     position: fixed;
     top: 0;
@@ -115,11 +79,37 @@ export default {
     height: 100%;
     width: 100%;
 
+    display:flex;
+    flex-direction: column;
+    justify-content: start;
+
     background-color: #101010;
 }
+
+#top-nav {
+  display: flex;
+  width: 100%;
+
+  flex: 1 0 10%;
+}
+
+#title {
+  margin-left: 2.5%;
+  align-self: center;
+}
+
+#footer {
+  height: 10%;
+  flex: 1 0 10%;
+}
+
 
 html, body {
   margin: 0px;
   height: 100%;
+}
+
+h1 {
+  margin: 0;
 }
 </style>

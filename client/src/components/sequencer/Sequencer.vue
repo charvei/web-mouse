@@ -5,7 +5,6 @@
         :key="note"
 
         v-bind:pitch="note"
-        v-bind:sequence="getRelevantNoteSequence(note)"
 
         @stepPainted="stepPainted"/>
     </div>
@@ -17,43 +16,25 @@ import NoteContainer from "./NoteContainer.vue"
 export default {
   name: 'Sequencer',
   components: {
-    NoteContainer
+    NoteContainer,
   },
   data() {
     return {
       notes: [
-         "B", "A", "G", "F", "E", "D", "C"
+        "B5", "A5", "G5", "F5", "E5", "D5", "C5",
+        "B4", "A4", "G4", "F4", "E4", "D4", "C4", 
+        "B3", "A3", "G3", "F3", "E3", "D3", "C3", 
+        "B2", "A2", "G2", "F2", "E2", "D2", "C2",
       ]
     }
   },
   props: {
-    sequence: Array
   },
   methods: {
       stepPainted: function(pitch, position) {
-        console.log("emitting from sequencer, pos: " + position + ", pitch: " + pitch)
+        console.log("Sequencer emit: stepPainted, pos: " + position + ", pitch: " + pitch)
         this.$emit('stepPainted', pitch, position)
-      },
-      getRelevantNoteSequence: function(pitch) {
-        let resultSequence = []
-        this.sequence.forEach(note => {
-          if (note.pitch === pitch) {
-            resultSequence.push(note)
-          }
-        })
-        return resultSequence
-        
-        
-        // return this.sequence.map((note) => {
-        //   if (note.pitch === pitch) {
-        //     return note
-        //   }
-        // })
       }
-  },
-  mounted() {
-    console.log("mounted sequencer")
-    console.log(this.sequence)
   }
 }
 //clicking step will add a new note of length 1 step to bar @ position n-1
@@ -65,38 +46,11 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  flex: 1 0 70%;
+  
+  overflow: scroll;
 
-
-  background-color: #555555;
+  background-color: #333333;
 }
 
-#note-container {
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-
-  width: 80%;
-  justify-content: start;
-  border-top: 1px solid #444444;
-  border-bottom: 1px solid #444444;
-}
-
-#step-container {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
-.note {
-  padding: 0.5%;
-  background-color: cadetblue;
-  border-right: 1px white solid;
-}
-
-.step {
-  padding: 0.5%;
-  background-color: black;
-  width: 100%;
-  border-right: 1px white solid;
-}
 </style>

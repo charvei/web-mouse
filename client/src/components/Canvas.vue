@@ -9,7 +9,6 @@ export default {
   name: 'Canvas',
   props: {
     msg: String,
-    clientData: Array,
   },
   methods: {
     drawToCanvas: function() {
@@ -17,7 +16,7 @@ export default {
       this.canvas.height = window.innerHeight
 
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-      this.clientData.forEach(client => {
+      this.$store.state.roomMouseData.forEach(client => {
         this.context.fillStyle = client.colourHex
         this.context.fillRect(client.mouse.x * this.canvas.width, client.mouse.y * this.canvas.height, 10, 10)
       })
@@ -26,7 +25,7 @@ export default {
   mounted() {
     this.canvas = document.getElementById("mouse-canvas")
     this.context = this.canvas.getContext("2d")
-    setInterval(this.drawToCanvas, 1)
+    setInterval(this.drawToCanvas, 10)
   }
 }
 </script>
