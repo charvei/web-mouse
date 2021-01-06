@@ -5,9 +5,9 @@
             <button id="pause-button" class="control-button">Pause</button>
             <button id="stop-button" class="control-button" v-on:click="stop">Stop</button>
         </div>
-        <div id="seek-container">
+        <!-- <div id="seek-container">
             hello
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -48,7 +48,11 @@ export default {
           handler(newSequence, oldSequence) {
             this.part.clear()
             newSequence.forEach(note => {
+                console.log(note)
                 this.part.at(note.time, note)
+                //this.part.at(note.time, ["16n", ["C5", "E5"]])
+                //this.part.at(note.time, {pitch: "C5", duration: "16n"} )
+                //this.part.at(note.time, ["C5", "G5"])
             })
           }
       }
@@ -60,23 +64,24 @@ export default {
             
         this.part.loop = true
         this.part.loopEnd = '1m'
-        this.part.start()
+        //this.part.start()
 
-        Tone.Transport.bpm.value = 120
+        Tone.Transport.bpm.value = 80
         Tone.Transport.start()
       },
       stop: function() {
-          this.part.stop()
+          //this.part.stop()
           Tone.Transport.stop()
       },
   },
-  created() {
+  mounted() {
       this.synth = new Tone.Synth().toDestination()
 
       this.part = new Tone.Part((time, value) => {
           console.log("trying to play a sound")
           this.synth.triggerAttackRelease(value.pitch, value.duration, time, 0.9)
-      }, [])
+          //this.synth.triggerAttackRelease(value, time, 0.9) //note = ["note.time", [note.pitch]]
+      }, []).start()
   }
 }
 //clicking step will add a new note of length 1 step to bar @ position n-1
@@ -87,12 +92,11 @@ export default {
 #playback-controller-container {
     width: 100%;
 
-    flex: 1 0 5%;
     
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    background-color: #ddd;
+
+    /* background-color: #EEE; */
+    background-color: #222222;
+    border-top: 1px solid #444444;
 }
 
 /* #controls {
@@ -100,11 +104,13 @@ export default {
 } */
 
 #controls-container {
-    width: 15%;
+    margin-left: 0.5%;
+    width: 20%;
+    height: 100%;
     display: flex;
     flex-direction: center;
     justify-content: start;
-    border-bottom: 1px solid black;
+    /* border: 1px solid red; */
 }
 
 #seek-container {
@@ -113,7 +119,13 @@ export default {
 }
 
 .control-button {
-    margin-right: 2.5%;
+    width: 20%;
+    height: 50%;
+    margin-right: 1%;
+    margin-top: 5%;
+    margin-bottom: 4%;
+
+    border: 1px solid #222222;
 }
 
 

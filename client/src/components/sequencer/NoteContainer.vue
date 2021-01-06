@@ -45,6 +45,7 @@ export default {
   justify-content: start;
   border-top: 1px solid #444444;
   border-bottom: 1px solid #444444;
+  border-left: 1px solid #444444;
 }
 
 #step-container {
@@ -57,6 +58,7 @@ export default {
     padding: 0.5%;
     width: 5%;
     text-align: center;
-    background-color: cadetblue;
+    background-color: #000022;
+    border-right: 1px solid white;
 }
 </style>

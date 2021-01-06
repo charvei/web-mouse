@@ -33,7 +33,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #mouse-canvas {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     margin: 0px;
 
     position: fixed;

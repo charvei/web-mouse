@@ -1,5 +1,7 @@
 <template>
+  <div class="padder">
     <div id="sequencer-container">
+      
       <NoteContainer
         v-for="note in notes"
         :key="note"
@@ -8,6 +10,7 @@
 
         @stepPainted="stepPainted"/>
     </div>
+  </div>
 </template>
 
 <script>
@@ -46,11 +49,30 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  flex: 1 0 70%;
+  width: 100%;
   
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   background-color: #333333;
+}
+
+
+.padder {
+  display: flex;
+  flex: 1 0 70%;
+  height: 60%;
+
+  background-color: #222;
+  
+  padding-bottom: 0.5%;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
+
+  /* border: 5px solid #911; */
+  /* border-top: 1px solid #444444;
+  margin-top: 1px; */
+  
 }
 
 </style>

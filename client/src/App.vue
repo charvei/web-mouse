@@ -2,7 +2,8 @@
   <div id="app" v-on:mousemove="updateMyMouseCoordinates" >
     <div id="content-container">
       <div id="top-nav">
-        <h1 id="title">S e q u e n c . e r</h1>
+        <!-- <h1 id="title">S e q u e n c u e r</h1> -->
+         <h1 id="title"> Sequence_r</h1>
       </div>
       <!-- <h1>S e q u e n c e . w i t   h . F r i e n d s</h1> -->
       <PlaybackController />
@@ -53,6 +54,12 @@ export default {
     this.startEmittingMyMouseCoordinates()
   }
 }
+
+/**
+ * Other possible sections:
+ *  - below the sequencer, have a section for a more expanded out view of the measures. Use a [+] measure button only to edit the particular measure (duh)
+ *  - use a song view (the above concept) for interacting with measures and forming song sections
+ */
 </script>
 
 <style>
@@ -84,17 +91,24 @@ export default {
     justify-content: start;
 
     background-color: #101010;
+    background-color: #050505;
 }
 
 #top-nav {
   display: flex;
   width: 100%;
 
-  flex: 1 0 10%;
+  /* background-color: #222222; */
+  background-color: black;
+  margin-bottom: 1%;
+  border-bottom: 1px solid #444444;
+  border-top: 1px solid #444444;
+
+  height: 7%;
 }
 
 #title {
-  margin-left: 2.5%;
+  margin-left: 0.5%;
   align-self: center;
 }
 
@@ -111,5 +125,8 @@ html, body {
 
 h1 {
   margin: 0;
+  letter-spacing: 3px;
 }
+
+
 </style>

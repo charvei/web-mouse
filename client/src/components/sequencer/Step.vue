@@ -52,6 +52,6 @@ export default {
     
     .paint {
         width: 100%;
-        background-color: cadetblue
+        background-color: #0000CC;
     }
 </style>
