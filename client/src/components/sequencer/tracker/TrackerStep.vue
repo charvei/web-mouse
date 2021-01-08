@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'Step',
+  name: 'TrackerStep',
   props: {
       stepIndex: Number,
       parentBeat: String,

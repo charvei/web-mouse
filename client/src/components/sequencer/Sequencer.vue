@@ -1,25 +1,38 @@
 <template>
-  <div class="padder">
     <div id="sequencer-container">
+
+      <PlaybackController />
+
+      <div id="sequencer">
+        <div id="tracker-container">
+          <Tracker />
+        </div>
+        <div id="notes-container">
+          <NoteSequence
+            v-for="note in notes"
+            :key="note"
+
+            v-bind:pitch="note"
+
+            @stepPainted="stepPainted"/>
+        </div>
+      </div>
       
-      <NoteContainer
-        v-for="note in notes"
-        :key="note"
-
-        v-bind:pitch="note"
-
-        @stepPainted="stepPainted"/>
     </div>
-  </div>
 </template>
 
 <script>
-import NoteContainer from "./NoteContainer.vue"
+import NoteSequence from "./NoteSequence.vue"
+import PlaybackController from './PlaybackController.vue'
+import Tracker from './tracker/Tracker.vue'
+
 
 export default {
   name: 'Sequencer',
   components: {
-    NoteContainer,
+    NoteSequence,
+    PlaybackController,
+    Tracker
   },
   data() {
     return {
@@ -47,32 +60,43 @@ export default {
 <style scoped>
 #sequencer-container {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  width: 100%;
   
-  overflow-y: scroll;
-  overflow-x: hidden;
+  height: 80%;
 
-  background-color: #333333;
+  background-color: #444444;
+
+  padding-left: 0.5%;
+  padding-bottom: 1%;
 }
 
-
-.padder {
+#sequencer {
   display: flex;
-  flex: 1 0 70%;
-  height: 60%;
+  flex-direction: column;
 
-  background-color: #222;
+  height: 95%;
   
-  padding-bottom: 0.5%;
-  padding-left: 0.5%;
-  padding-right: 0.5%;
+  overflow-x: scroll;
 
-  /* border: 5px solid #911; */
-  /* border-top: 1px solid #444444;
-  margin-top: 1px; */
-  
+}
+
+#tracker-container {
+  display: flex;
+  flex-direction: column;
+
+  /* overflow-y simply so that it is same size as notes-container */
+  overflow-y: scroll;
+  overflow-x: visible;
+}
+
+#notes-container {
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: scroll;
+  overflow-x: visible;
+  height: 100%;
+
 }
 
 </style>

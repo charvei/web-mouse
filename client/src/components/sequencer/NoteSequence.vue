@@ -1,9 +1,15 @@
 <template>
-    <div id="note-container">
+    <div id="note-sequence">
         <div class="note" id="note1">{{ this.pitch }}</div>
         <div id="step-container">
           <Measure 
             v-bind:measureIndex="0"
+            v-bind:beatsPerMeasure="4"
+            v-bind:pitch="pitch"
+            @stepPainted="stepPainted"
+          />
+          <Measure 
+            v-bind:measureIndex="1"
             v-bind:beatsPerMeasure="4"
             v-bind:pitch="pitch"
             @stepPainted="stepPainted"
@@ -35,30 +41,24 @@ export default {
 </script>
 
 <style scoped>
-#note-container {
-  flex: 1 0 auto;
-
+#note-sequence {
   display: flex;
   flex-direction: row;
-  align-self: center;
-  width: 100%;
-  justify-content: start;
-  border-top: 1px solid #444444;
-  border-bottom: 1px solid #444444;
-  border-left: 1px solid #444444;
+  align-self: left;
+  border-top: 1px solid #555555;
+  border-bottom: 1px solid #555555;
+  border-left: 1px solid #555555;
 }
 
 #step-container {
   display: flex;
   flex-direction: row;
-  width: 100%;
 }
 
 .note {
     padding: 0.5%;
-    width: 5%;
     text-align: center;
-    background-color: #000022;
+    background-color: #050533;
     border-right: 1px solid white;
 }
 </style>

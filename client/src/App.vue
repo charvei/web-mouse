@@ -1,14 +1,15 @@
 <template>
   <div id="app" v-on:mousemove="updateMyMouseCoordinates" >
     <div id="content-container">
+      
       <div id="top-nav">
-        <!-- <h1 id="title">S e q u e n c u e r</h1> -->
          <h1 id="title"> Sequence_r</h1>
       </div>
-      <!-- <h1>S e q u e n c e . w i t   h . F r i e n d s</h1> -->
-      <PlaybackController />
+      
       <Sequencer @stepPainted="stepPainted"/> 
+      
       <div id="footer"></div>
+    
     </div>
     <Canvas msg="Canvas" />
   </div>
@@ -17,13 +18,12 @@
 <script>
 import Canvas from './components/Canvas.vue'
 import Sequencer from './components/sequencer/Sequencer.vue'
-import PlaybackController from './components/PlaybackController.vue'
+
 
 export default {
   name: 'App',
   components: {
-    Canvas,
-    PlaybackController,
+    Canvas,    
     Sequencer
   },
   data() {
@@ -86,12 +86,12 @@ export default {
     height: 100%;
     width: 100%;
 
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: start;
 
-    background-color: #101010;
     background-color: #050505;
+    background-color: #151515;
 }
 
 #top-nav {
@@ -99,10 +99,10 @@ export default {
   width: 100%;
 
   /* background-color: #222222; */
-  background-color: black;
+  background-color: #050505;
   margin-bottom: 1%;
-  border-bottom: 1px solid #444444;
-  border-top: 1px solid #444444;
+  border-bottom: 1px solid #555555;
+  border-top: 1px solid #555555;
 
   height: 7%;
 }

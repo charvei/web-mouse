@@ -1,34 +1,28 @@
 <template>
-  <div class="measure">
-      <Beat 
+  <div id="tracker-measure">
+      <TrackerBeat
           v-for="index in beatsPerMeasure"
           v-bind:key="index - 1"
           v-bind:beatIndex="index - 1"
           v-bind:stepsPerBeat="4"
           v-bind:parentMeasureIndex="measureIndex"
-          v-bind:pitch="pitch"
-          @stepPainted="stepPainted"
       />
   </div>
 </template>
 
 <script>
-import Beat from "./Beat.vue"
+import TrackerBeat from "./TrackerBeat.vue"
 
 export default {
-  name: 'Measure',
+  name: 'TrackerMeasure',
   components: {
-      Beat,
+      TrackerBeat,
   },
   props: {
     measureIndex: Number,
     beatsPerMeasure: Number,
-    pitch: String,
   },
   methods: {
-      stepPainted: function(step) {
-          this.$emit("stepPainted", step)
-      }
   },
   mounted() {
   },
@@ -37,12 +31,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .measure {
+    #tracker-measure {
         display: flex;
-        flex-direction: row;
+        flex-direction: row; 
 
         width: 90vw;
-        background-color: pink;
+        /* background-color: pink; */
     }
 
 
