@@ -27,7 +27,7 @@ export default {
   },
   methods: {
       stepPainted: function(step) {
-          this.$emit("stepPainted", step)
+          this.$emit("stepPainted", this.pitch, step)
       }
   },
   mounted() {
@@ -41,7 +41,10 @@ export default {
         display: flex;
         flex-direction: row;
 
-        width: 90vw;
+        flex: 0 0 90vw;
+
+        height: 4vh;
+
         background-color: pink;
     }
 

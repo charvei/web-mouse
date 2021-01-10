@@ -1,6 +1,7 @@
 <template>
     <div class="step" v-on:click="paintStep">
-        <div class="paint" v-if="isStepPainted()"/>
+        <div class="tracker-line" v-if="currentlyPlaying"/>
+
     </div>
 </template>
 
@@ -15,7 +16,8 @@ export default {
   },
   data() {
       return {
-          stepValue: this.parentBeat + ":" + this.stepIndex
+          stepValue: this.parentBeat + ":" + this.stepIndex,
+          currentlyPlaying: false
       }
   },
   methods: {
@@ -26,12 +28,30 @@ export default {
         if ((this.$store.state.sequence).find(note => ((note.time === this.stepValue) && (note.pitch === this.pitch)))) {
             return true
         }
-      }
+      },
   },
   mounted() {
     // Debugging:
     //   if (this.stepValue === "0:0:0"){
     //   }
+
+    // if (this.$store.state.tone.Transport.position ===)
+
+        // Draw tracker
+    this.$store.state.tone.Transport.scheduleRepeat((time) => {
+        this.$store.state.tone.Draw.schedule(() => {
+            // save current play position into state
+            if ("0:"+this.$store.state.tone.Transport.position.substring(2,5) === this.stepValue) {
+                this.currentlyPlaying = true
+            } else {
+                this.currentlyPlaying = false
+            }
+            
+        }, time)
+    },
+    "16n",  // repeat interval
+    "0m"    // when to start
+    )
       
       
   }
@@ -40,18 +60,18 @@ export default {
 
 <style scoped>
     .step {
-        padding: 0.5%;
-        background-color: #050505;
+        
 
         display: flex;
 
         width: 100%;
-        padding: 1%;
+
+        background-color: white;
         border-right: 1px #666666 dashed;
     }
     
-    .paint {
+    .tracker-line {
         width: 100%;
-        background-color: #1111DD;
+        background-color: red;
     }
 </style>

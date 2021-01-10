@@ -3,20 +3,42 @@
 
       <PlaybackController />
 
+
       <div id="sequencer">
-        <div id="tracker-container">
+          
+          <!-- top row -->
           <Tracker />
-        </div>
-        <div id="notes-container">
-          <NoteSequence
-            v-for="note in notes"
-            :key="note"
 
-            v-bind:pitch="note"
-
-            @stepPainted="stepPainted"/>
-        </div>
-      </div>
+          <!-- 2nd & last'main' body row -->
+          <div id="notes-section">
+            <div id="note-column" class="sequence-table-main-left-col note-sequence-scroll-synced">
+              <div id="note-container">
+                <Note 
+                  v-for="note in notes"
+                  :key="note"
+                  v-bind:pitch="note"
+                  />
+              </div>
+            </div>
+            <div id="step-column" class="sequence-table-main-right-col note-sequence-scroll-synced">
+              <div id="measures-container" v-for="note in notes" :key="note">
+                <Measure 
+                    v-bind:measureIndex="0"
+                    v-bind:beatsPerMeasure="4"
+                    v-bind:pitch="note"
+                    @stepPainted="stepPainted"
+                  />
+                  <Measure 
+                    v-bind:measureIndex="1"
+                    v-bind:beatsPerMeasure="4"
+                    v-bind:pitch="note"
+                    @stepPainted="stepPainted"
+                  />
+                  
+              </div>
+            </div>
+          </div>
+      </div> 
       
     </div>
 </template>
@@ -26,13 +48,17 @@ import NoteSequence from "./NoteSequence.vue"
 import PlaybackController from './PlaybackController.vue'
 import Tracker from './tracker/Tracker.vue'
 
+import Note from "./Note.vue"
+import Measure from "./Measure.vue"
 
 export default {
   name: 'Sequencer',
   components: {
+    Note,
     NoteSequence,
     PlaybackController,
-    Tracker
+    Tracker,
+    Measure,
   },
   data() {
     return {
@@ -47,10 +73,33 @@ export default {
   props: {
   },
   methods: {
-      stepPainted: function(pitch, position) {
-        console.log("Sequencer emit: stepPainted, pos: " + position + ", pitch: " + pitch)
-        this.$emit('stepPainted', pitch, position)
-      }
+    stepPainted: function(pitch, position) {
+      console.log("Sequencer emit: stepPainted, pos: " + position + ", pitch: " + pitch)
+      this.$emit('stepPainted', pitch, position)
+    },
+    synchScroll: function(selector) {
+      let active = null
+
+      document.querySelectorAll(selector).forEach(element => {
+        element.addEventListener("mouseenter", e  => {
+          active = e.target
+        })
+
+        element.addEventListener("scroll", e => {
+          if (e.target !== active) return
+
+          document.querySelectorAll(selector).forEach(target => {
+            if (active === target) return
+
+            target.scrollTop = active.scrollTop
+            target.scrollLeft = active.scrollLeft
+          })
+        })
+      })
+    }
+  },
+  mounted() {
+    this.synchScroll(".note-sequence-scroll-synced")
   }
 }
 //clicking step will add a new note of length 1 step to bar @ position n-1
@@ -62,7 +111,7 @@ export default {
   display: flex;
   flex-direction: column;
   
-  height: 80%;
+  flex: 0 0 90%;
 
   background-color: #444444;
 
@@ -74,29 +123,62 @@ export default {
   display: flex;
   flex-direction: column;
 
-  height: 95%;
-  
-  overflow-x: scroll;
-
+  flex: 0 0 90%;
 }
 
-#tracker-container {
+#notes-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
-  /* overflow-y simply so that it is same size as notes-container */
-  overflow-y: scroll;
-  overflow-x: visible;
+  height: 70vh;
+
+  background-color: black;
+
+  flex: 1 1 95%;
 }
 
-#notes-container {
-  display: flex;
-  flex-direction: column;
-
-  overflow-y: scroll;
-  overflow-x: visible;
+#measures-container {
   height: 100%;
 
+  display: flex;
+  flex-direction: row;
+
 }
+
+#note-container {
+  height: 100%;
+  
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.sequence-table-main-left-col {
+  display: flex;
+  flex-direction: column;
+
+  flex: 0 0 5.75%;
+
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.sequence-table-main-left-col::-webkit-scrollbar {
+  /* display: none; */
+  visibility:hidden;
+}
+
+.sequence-table-main-right-col {
+  display: flex;
+  flex-direction: column;
+
+  flex: 0 0 94.25%;
+
+  overflow-x: scroll;
+  overflow-y: scroll;
+  
+}
+
+
+
 
 </style>

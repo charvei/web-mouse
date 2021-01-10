@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import * as Tone from "tone"
 
 export default {
   name: 'PlaybackController',
@@ -53,25 +52,37 @@ export default {
   methods: {
       play: function() {
         console.log("play button hit")
-        Tone.start()
+        this.$store.state.tone.start()
             
         this.part.loop = true
         this.part.loopEnd = '1m'
 
-        Tone.Transport.bpm.value = 80
-        Tone.Transport.start()
+        this.$store.state.tone.Transport.bpm.value = 80
+        this.$store.state.tone.Transport.start()
       },
       stop: function() {
-        Tone.Transport.stop()
+        this.$store.state.tone.Transport.stop()
       },
   },
   mounted() {
-      this.synth = new Tone.PolySynth(Tone.Synth).toDestination()
+        //this.synth = new Tone.PolySynth(Tone.Synth).toDestination()
+        this.synth = new this.$store.state.tone.PolySynth(this.$store.state.tone.Synth).toDestination()
 
-      this.part = new Tone.Part((time, value) => {
-          this.synth.triggerAttackRelease(value.pitch, value.duration, time, 0.9) //note = ["note.time", [note.pitch]]
-      }, []).start()
+        this.part = new this.$store.state.tone.Part((time, value) => {
+            this.synth.triggerAttackRelease(value.pitch, value.duration, time, 0.9) //note = ["note.time", [note.pitch]]
+        }, []).start()
 
+        // // Draw tracker
+        // this.$store.state.tone.Transport.scheduleRepeat((time) => {
+        //     this.$store.state.tone.Draw.schedule(() => {
+        //         // save current play position into state
+        //         console.log(this.$store.state.tone.Transport.position)
+                
+        //     }, time)
+        // },
+        // "32n",  // repeat interval
+        // "0m"    // when to start
+        // )
   }
 }
 //clicking step will add a new note of length 1 step to bar @ position n-1
@@ -83,9 +94,9 @@ export default {
     display: flex;  
     flex-direction: left;
 
-    height: 2.5%;
+    flex: 0 0 3%;
 
-    padding: 0.5% 0% 0.5% 0%;
+    padding: 0.25% 0% 0.5% 0%;
 
     /* background-color: #EEE; */
     border-top: 1px solid #555555;
@@ -93,14 +104,13 @@ export default {
 
 #controls-container {
     display: flex;
-    flex-direction: center;
     justify-content: start;
+    width: 100%;
 }
 
 .control-button {
-    margin-right: 1%;
+    flex: 0 0 5.75%;
 
-    border: 1px solid #333333;
 }
 
 

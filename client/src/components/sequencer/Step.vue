@@ -48,6 +48,8 @@ export default {
         width: 100%;
         padding: 1%;
         border-right: 1px #666666 dashed;
+
+        border-bottom: 1px #666666 solid;
     }
     
     .paint {

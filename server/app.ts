@@ -73,7 +73,7 @@ io.on("connection", (socket: Socket) => {
         })
         if (existingStepIndex < 0) {
             connectionLog("Adding to notes")
-            sequence.push({duration: "16n", time: time, pitch: pitch})
+            sequence.push({duration: "32n", time: time, pitch: pitch})
         } else {
             connectionLog("Removing notes")
             sequence.splice(existingStepIndex, 1)

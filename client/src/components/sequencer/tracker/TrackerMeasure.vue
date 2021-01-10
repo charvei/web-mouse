@@ -35,7 +35,9 @@ export default {
         display: flex;
         flex-direction: row; 
 
-        width: 90vw;
+        flex: 0 0 90vw;
+
+        /* width: 90vw; */
         /* background-color: pink; */
     }
 

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import io from 'socket.io-client'
 
 import App from './App.vue'
+import * as Tone from "tone"
 
 Vue.config.productionTip = false
 
@@ -23,10 +24,12 @@ const store = new Vuex.Store({
     sequence: [], //Notes[]
     socket: io(),   // could potentially hide socket from state even? is that a good idea?
     clientId: null,
-    roomMouseData: []
+    roomMouseData: [],
+
+    // TONE.JS PLAYBACK
+    tone: Tone
   },
   mutations: {
-
     // CLIENT ID
     setClientId (state, clientId) {
       state.clientId = clientId
@@ -47,9 +50,13 @@ const store = new Vuex.Store({
     removeNoteFromSequenceByIndex (state, index) {
       state.sequence.splice(index, 1)
     }
+
+    // TONE.JS PLAYBACK
+    //setCurrent... do i even need to save it?
+
+
   },
   actions: {
-
     // CLIENT ID
     setClientId (context, clientId) {
       context.commit('setClientId', clientId)
@@ -73,6 +80,7 @@ const store = new Vuex.Store({
       console.log("remove note from sequence by id action")
       context.commit('removeNoteFromSequenceByIndex', index)
     }
+
   }
 })
 

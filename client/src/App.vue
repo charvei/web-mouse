@@ -3,7 +3,7 @@
     <div id="content-container">
       
       <div id="top-nav">
-         <h1 id="title"> Sequence_r</h1>
+         <h1 id="title"> Sequenc.er</h1>
       </div>
       
       <Sequencer @stepPainted="stepPainted"/> 
@@ -100,11 +100,10 @@ export default {
 
   /* background-color: #222222; */
   background-color: #050505;
-  margin-bottom: 1%;
   border-bottom: 1px solid #555555;
   border-top: 1px solid #555555;
 
-  height: 7%;
+  flex: 0 0 5%;
 }
 
 #title {
@@ -113,8 +112,8 @@ export default {
 }
 
 #footer {
-  height: 10%;
-  flex: 1 0 10%;
+  flex: 0 0 5%;
+  background-color: #05050505;
 }
 
 

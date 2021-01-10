@@ -22,7 +22,7 @@
 import Measure from "./Measure.vue"
 
 export default {
-  name: 'Note',
+  name: 'NoteSequence',
   components: {
     Measure
   },
@@ -57,6 +57,7 @@ export default {
 
 .note {
     padding: 0.5%;
+    width: 100px;
     text-align: center;
     background-color: #050533;
     border-right: 1px solid white;
