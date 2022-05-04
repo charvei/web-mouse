@@ -1,6 +1,8 @@
 # Web Mouse
 
-A quick full-stack experiment for learning **Vue** and **Socket.io**. 
+An online collaborative sequencer for music collaboration (similar to Miro) and quick experiment for learning **Vue** and **Socket.io**.
+
+![image001](https://user-images.githubusercontent.com/30401158/166687878-3fec394f-8061-400c-93a8-40df10d8f27d.gif)
 
 ## Summary
 
